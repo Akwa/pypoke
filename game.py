@@ -1,16 +1,34 @@
 # -*- coding: utf-8 -*-
 
-from pypoke.helpers import get_file_content
+from pypoke.configuration import constants
+from pypoke.configuration.versions import Version
 
 
 class Game(object):
-    out_path = 'fakeem.gbc'
 
     def __init__(self, rom_path):
-        self._data = get_file_content(path=rom_path, mode='rb')
+        """
+        Loads data from game, validates it, then extracts it.
+        :param rom_path: path to GSC Pokemon game file (*.gbc)
+        """
+        self.data = self.load_content(path=rom_path)
+        self.version = Version.get_version_instance(self.get_version_string())
 
+    @staticmethod
+    def load_content(path):
+        """
+        Wraps the open builtin function and returns file contents.
+        :param path: path to GSC Pokemon game file (*.gbc)
+        :return: file content in binary form
+        """
+        with open(path, 'rb') as file:
+            data = file.read()
+        return data
 
-    @property
-    def data(self):
-        return self._data
-
+    def get_version_string(self):
+        """
+        Returns the version of current game retrieved from rom header.
+        :return: untranslated game version (as string)
+        """
+        version = self.data.__getslice__(*constants.VERSION_OFFSETS)
+        return version

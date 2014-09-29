@@ -15,4 +15,4 @@ __pycache__/
 *.swo
 
 # PyCharm project files
-workspace.xml
+.idea
