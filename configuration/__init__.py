@@ -1,0 +1,1 @@
+from pypoke.configuration.default_versions import Crystal, Gold, Silver

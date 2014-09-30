@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pypoke.configuration import constants
-from pypoke.configuration.versions import Version
+from pypoke.versioning.versions import Version
 
 
 class Game(object):
