@@ -2,12 +2,8 @@
 """Pointer classes are here."""
 
 
-class Pointers(object):
-
-    class MissingPointerData(Exception):
-        pass
-
-    segments = (
+class PointerData(object):
+    section_names = {
         'base_stats',  # Pokemon base stats data
         'evos_moves',  # Pokemon evolution and learnsets data
         'moves',  # Move properties data
@@ -16,20 +12,20 @@ class Pointers(object):
         'names',  # Pokemon names data
         'move_names',  # Move names data
         'tms',  # TMs/HMs data
-    )
+    }
+
+    class MissingPointerDataError(Exception):
+        pass
 
     def __init__(self, pointer_data):
-        for segment in self.segments:
+        """
+        Makes sure all sections are found and loaded.
+        :param pointer_data:
+        """
+        for section in self.section_names:
             try:
-                self.__setattr__(segment, pointer_data[segment])
+                self.__setattr__(section, pointer_data[section])
             except KeyError:
-                raise self.MissingPointerData(
-                    'Missing `%s` pointer argument on instantiation.' % segment
+                raise self.MissingPointerDataError(
+                    'Missing `%s` pointer argument on instantiation.' % section
                 )
-
-class CrystalPointers(Pointers):
-
-    segments = Pointers.segments + (
-        'move_names_end',  # Crystal version has little move names space
-    )
-
