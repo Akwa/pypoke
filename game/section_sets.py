@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Pointer classes are here."""
+"""SectionSet classes are here."""
 
 
-class PointerData(object):
+class SectionSet(object):
     section_names = {
         'base_stats',  # Pokemon base stats data
         'evos_moves',  # Pokemon evolution and learnsets data
@@ -17,15 +17,15 @@ class PointerData(object):
     class MissingPointerDataError(Exception):
         pass
 
-    def __init__(self, pointer_data):
+    def __init__(self, **kwargs):
         """
         Makes sure all sections are found and loaded.
         :param pointer_data:
         """
-        for section in self.section_names:
+        for section_name in self.section_names:
             try:
-                self.__setattr__(section, pointer_data[section])
+                self.__setattr__(section_name, kwargs[section_name])
             except KeyError:
                 raise self.MissingPointerDataError(
-                    'Missing `%s` pointer argument on instantiation.' % section
+                    'Missing `%s` argument on instantiation.' % section_name
                 )

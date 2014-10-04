@@ -4,14 +4,53 @@
 
 class Section(object):
 
-    def __init__(self):
+    class NoPointerError(Exception):
         pass
 
+    def __init__(self, start=None):
+        if start is None:
+            raise self.NoPointerError(
+                'No start data pointer provided on instantiation.'
+            )
+        self.start = start
 
 
 class BaseStatsSection(Section):
-    pointer = 'base_stats'
+    short = 'base_stats'
 
-    def get_data(self, raw_data, pointer):
-        pass
 
+class EvolutionsMovesSection(Section):
+    short = 'evos_moves'
+
+
+class EvolutionMovesSection(Section):
+    short = 'evos_moves'
+
+
+class MovesSection(Section):
+    short = 'moves'
+
+
+class PalettesSection(Section):
+    short = 'palettes'
+
+
+class EggMovesSection(Section):
+    short = 'egg_moves'
+
+
+class NamesSection(Section):
+    short = 'names'
+
+
+class MovesNamesSection(Section):
+    short = 'moves_names'
+
+
+class CrystalMovesNamesSection(MovesNamesSection):
+    pass
+    # moves_names end - 0x1ca896
+
+
+class TmsSection(Section):
+    short = 'tms'

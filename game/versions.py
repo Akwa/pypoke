@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """Version classes are here."""
 
-from pypoke.game import sections
-from pypoke.game.pointer_data import PointerData
-
+from pypoke.game.sections import (
+    BaseStatsSection, EvolutionsMovesSection, MovesSection,
+    PalettesSection, EggMovesSection, NamesSection, MovesNamesSection,
+    CrystalMovesNamesSection, TmsSection
+)
+from pypoke.game.section_sets import SectionSet
 
 class Version(object):
 
@@ -46,43 +49,43 @@ class Version(object):
 class Crystal(Version):
     version_string = 'PM_CRYSTAL'
     repr_string = 'Pokemon Crystal'
-    pointers = PointerData({
-        'base_stats': 0x51424,
-        'evos_moves': 0x425b1,
-        'moves': 0x41afb,
-        'palettes': 0xa8d6,
-        'egg_moves': 0x23b11,
-        'names': 0x53384,
-        'move_names': 0x1c9f29,
-        'tms': 0x1167a,
-    })
+    sections = SectionSet(
+        base_stats=BaseStatsSection(start=0x51424),
+        evos_moves=EvolutionsMovesSection(start=0x425b1),
+        moves=MovesSection(start=0x41afb),
+        palettes=PalettesSection(start=0xa8d6),
+        egg_moves=EggMovesSection(start=0x23b11),
+        names=NamesSection(start=0x53384),
+        move_names=CrystalMovesNamesSection(start=0x1c9f29),
+        tms=TmsSection(start=0x1167a),
+    )
 
 
 class Gold(Version):
     version_string = 'POKEMON_GLD'
     repr_string = 'Pokemon Gold'
-    pointers = PointerData({
-        'base_stats': 0x51b0b,
-        'evos_moves': 0x427bd,
-        'moves': 0x41afe,
-        'palettes': 0xad45,
-        'egg_moves': 0x239fe,
-        'names': 0x1b0b74,
-        'move_names': 0x1b1574,
-        'tms': 0x11a66,
-    })
+    sections = SectionSet(
+        base_stats=BaseStatsSection(start=0x51b0b),
+        evos_moves=EvolutionsMovesSection(start=0x427bd),
+        moves=MovesSection(start=0x41afe),
+        palettes=PalettesSection(start=0xad45),
+        egg_moves=EggMovesSection(start=0x239fe),
+        names=NamesSection(start=0x1b0b74),
+        move_names=MovesNamesSection(start=0x1b1574),
+        tms=TmsSection(start=0x11a66),
+    )
 
 
 class Silver (Version):
     version_string = 'POKEMON_SLV'
     repr_string = 'Pokemon Silver'
-    pointers = PointerData({
-        'base_stats': 0x51b0b,
-        'evos_moves': 0x427bd,
-        'moves': 0x41afe,
-        'palettes': 0xad45,
-        'egg_moves': 0x239fe,
-        'names': 0x1b0b74,
-        'move_names': 0x1b1574,
-        'tms': 0x11a66,
-    })
+    sections = SectionSet(
+        base_stats=BaseStatsSection(start=0x51b0b),
+        evos_moves=EvolutionsMovesSection(start=0x427bd),
+        moves=MovesSection(start=0x41afe),
+        palettes=PalettesSection(start=0xad45),
+        egg_moves=EggMovesSection(start=0x239fe),
+        names=NamesSection(start=0x1b0b74),
+        move_names=MovesNamesSection(start=0x1b1574),
+        tms=TmsSection(start=0x11a66),
+    )
