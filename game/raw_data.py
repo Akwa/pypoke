@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-"""RawData class is here."""
 
 
 class RawData(str):
-    pass
+
+    def chunk_generator(self, start, end, unit):
+        for pos in xrange(start, end, unit):
+            yield super(RawData, self).__getslice__(pos, pos + unit)

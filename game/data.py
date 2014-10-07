@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Data class is here."""
 
 
 class Data(object):

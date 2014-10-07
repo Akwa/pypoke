@@ -3,7 +3,7 @@
 from pypoke.configuration import constants
 from pypoke.game.data import Data
 from pypoke.game.raw_data import RawData
-from pypoke.game.versions import Version
+from pypoke.game.versions import VersionFactory
 
 
 class Game(object):
@@ -14,7 +14,7 @@ class Game(object):
         :param rom_path: path to GSC Pokemon game file (*.gbc)
         """
         self._raw_data = self._load_content(path=rom_path)
-        self.version = Version(self._get_version_string())
+        self.version = VersionFactory(self._get_version_string())
         self.data = Data(self._raw_data, self.version)
 
     @staticmethod
