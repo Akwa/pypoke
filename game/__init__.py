@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from pypoke.configuration import constants
 from pypoke.game.data import Data
 from pypoke.game.raw_data import RawData

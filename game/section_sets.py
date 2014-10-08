@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from pypoke.game.sections import (
     BaseStatsSection, EvolutionsMovesSection, MovesSection,
     PalettesSection, EggMovesSection, NamesSection, MovesNamesSection,
@@ -35,8 +34,13 @@ class SectionSet(object):
         self.check_req_sections(section_names)
         sections = self.remove_redundant_sections(sections)
 
-        for section, start in sections.iteritems():
-            self.__setattr__(section.short, section(start, constants))
+        self._sections = {
+            sec.short: sec(start, constants) for sec, start in sections.iteritems()
+        }
+
+    def all(self):
+        for section in self._sections.itervalues():
+            yield section
 
     class MissingPointerDataError(Exception):
         pass
@@ -51,5 +55,7 @@ class SectionSet(object):
 
     @classmethod
     def remove_redundant_sections(cls, sections):
-        return {sec: pnt for sec, pnt in sections.iteritems()
-                if sec.short in cls.req_section_names}
+        return {
+            sec: pnt for sec, pnt in sections.iteritems()
+            if sec.short in cls.req_section_names
+        }

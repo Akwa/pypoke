@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from pypoke.configuration.constants import GscConstantsSet
 from pypoke.game.sections import (
     BaseStatsSection, EvolutionsMovesSection, MovesSection,
