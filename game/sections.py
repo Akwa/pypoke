@@ -43,9 +43,12 @@ class Section(object):
     def total_length(self):
         return self.end - self.start
 
-    def extract_data(self, raw_data):
+    def assert_lengths(self):
         assert len(self.fields) == self.unit
         assert self.total_length / self.object.MAX == self.unit
+
+    def extract_data(self, raw_data):
+        self.assert_lengths()
         chunk_gen = raw_data.chunk_generator(self.start, self.end, self.unit)
 
         for chunk in chunk_gen:
@@ -75,7 +78,7 @@ class MovesSection(Section):
         'animation',
         'effect',
         'power',
-        'type',
+        '_type',
         'accuracy',
         'pp',
         'chance',
@@ -101,6 +104,19 @@ class NamesSection(Section):
     unit_name = 'NAME_LENGTH'
     end_calculation = 'standard'
 
+    field = 'name'
+
+    def assert_lengths(self):
+        assert self.total_length / self.object.MAX == self.unit
+
+    def extract_data(self, raw_data):
+        self.assert_lengths()
+        chunk_gen = raw_data.chunk_generator(self.start, self.end, self.unit)
+
+        for chunk in chunk_gen:
+            chunk = self.constants.alphabet.decode(chunk, strip=0x50)
+            yield {self.field: chunk}
+
 
 class MovesNamesSection(Section):
     short = 'moves_names'
@@ -108,18 +124,15 @@ class MovesNamesSection(Section):
     unit_name = 'MOVES_NAME_LENGTH'
     end_calculation = 'greedy'
 
-    fields = (
-        'name',
-    )
+    field = 'name'
 
     def extract_data(self, raw_data):
-        field = self.fields[0]
-        chunk_gen = raw_data.splitter(self.start, self.end, chr(0x50))
+        chunk_gen = raw_data.splitter(self.start, self.end, 0x50)
         chunk_gen = itertools.islice(chunk_gen, 0, self.object.MAX)
 
         for chunk in chunk_gen:
             chunk = self.constants.alphabet.decode(chunk)
-            yield {field: chunk}
+            yield {self.field: chunk}
 
 
 class CrystalMovesNamesSection(MovesNamesSection):
@@ -133,6 +146,14 @@ class TmsSection(Section):
     unit_name = 'TM_LENGTH'
     end_calculation = 'standard'
 
-    fields = (
-        'move',
-    )
+    field = 'move'
+
+    def assert_lengths(self):
+        assert self.total_length / self.object.MAX == self.unit
+
+    def extract_data(self, raw_data):
+        self.assert_lengths()
+        byte_gen = raw_data.byte_generator(self.start, self.end, self.unit)
+
+        for byte in byte_gen:
+            yield {self.field: byte}

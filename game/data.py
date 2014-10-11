@@ -16,7 +16,6 @@ class Data(object):
     def load_data(self, raw_data):
         for section in self.sections.all():
             object = self.__getattribute__(section.object_name.lower())
-            if section.object_name != 'Moves': continue
             for i, data in enumerate(section.extract_data(raw_data), start=1):
                 object.__getitem__(i).update(data)
 

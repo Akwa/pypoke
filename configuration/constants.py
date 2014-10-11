@@ -24,7 +24,7 @@ class GscConstantsSet(object):
         PALETTE_LENGTH = 8
 
     class Tms(object):
-        MAX = 64
+        MAX = 61
 
         TM_LENGTH = 1
 
