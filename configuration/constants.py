@@ -6,9 +6,18 @@ VERSION_OFFSETS = 0x134, 0x143
 
 BANK_LENGTH = 0x4000
 GAME_LENGTH = 0x200000
+POINTER_LENGTH = 2
+BITS_IN_BYTE = 8
 
 
 class GscConstantsSet(object):
+    EVOLUTIONS_LENGTH = {
+        chr(0x01): 3,
+        chr(0x02): 3,
+        chr(0x03): 3,
+        chr(0x04): 3,
+        chr(0x05): 4,
+    }
 
     class Moves(object):
         MAX = 251

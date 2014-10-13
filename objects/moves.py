@@ -3,4 +3,4 @@ from pypoke.objects.base import BaseObject
 
 
 class Moves(BaseObject):
-    pass
+    create_name_map = True
