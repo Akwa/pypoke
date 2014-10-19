@@ -3,7 +3,7 @@ from pypoke.configuration.constants import GscConstantsSet
 from pypoke.game.sections import (
     BaseStatsSection, EvolutionsMovesSection, MovesSection,
     PalettesSection, EggMovesSection, NamesSection, MovesNamesSection,
-    CrystalMovesNamesSection, TmsSection
+    CrystalMovesNamesSection, TmsSection, TrainersSection
 )
 from pypoke.game.section_sets import SectionSet
 
@@ -54,6 +54,7 @@ class Crystal(Version):
         NamesSection: 0x53384,
         CrystalMovesNamesSection: 0x1c9f29,
         TmsSection: 0x1167a,
+        TrainersSection: 0x39999,
     }
 
 
@@ -71,10 +72,11 @@ class Gold(Version):
         NamesSection: 0x1b0b74,
         MovesNamesSection: 0x1b1574,
         TmsSection: 0x11a66,
+        TrainersSection: 0x3993e,
     }
 
 
-class Silver (Version):
+class Silver(Version):
     version_string = 'POKEMON_SLV'
     repr_string = 'Pokemon Silver'
     section_set = SectionSet
@@ -88,4 +90,5 @@ class Silver (Version):
         NamesSection: 0x1b0b74,
         MovesNamesSection: 0x1b1574,
         TmsSection: 0x11a66,
+        TrainersSection: 0x3993e,
     }

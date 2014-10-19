@@ -53,6 +53,35 @@ class RawData(str):
             char = self.__getitem__(pos)
         return self.get_byteslice(start, pos, arrayize)
 
+    def read_trainer_class(self, start, end, name_sep, trainer_sep,
+                           delimiters, arrayize=True):
+        name_sep = chr(name_sep) if type(name_sep) is int else name_sep
+        trainer_sep = chr(trainer_sep) if type(trainer_sep) is int else trainer_sep
+
+        output = []
+        pos_left = start
+        while pos_left < end:
+            trainer = []
+            pos_right = self.index(name_sep, pos_left)
+            name = self.get_byteslice(pos_left, pos_right, arrayize=False)
+            pos_left = pos_right + 1
+            trainer_type = self.__getitem__(pos_left)
+            delimiter = delimiters[trainer_type]
+            pos_left += 1
+            pos_right = self.index(trainer_sep, pos_left)
+            trainer.append(name)
+            trainer.append(trainer_type)
+            for i in xrange(pos_left, pos_right, delimiter):
+                j = i + delimiter
+                byteslice = self.get_byteslice(i, j, arrayize)
+                trainer.append(byteslice)
+            pos_left = pos_right + 1
+            output.append(trainer)
+        return output
+
+
+
+
     def smart_parse(self, start, sent,
                     delimiters=None, arrayize=True, step=None, return_pos=True):
 

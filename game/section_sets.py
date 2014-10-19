@@ -2,7 +2,7 @@
 from pypoke.game.sections import (
     BaseStatsSection, EvolutionsMovesSection, MovesSection,
     PalettesSection, EggMovesSection, NamesSection, MovesNamesSection,
-    TmsSection
+    TmsSection, TrainersSection
 )
 
 
@@ -25,6 +25,7 @@ class SectionSet(object):
             NamesSection,
             MovesNamesSection,
             TmsSection,
+            TrainersSection
         )
     }
 

@@ -2,6 +2,7 @@
 from pypoke.objects.moves import Moves
 from pypoke.objects.pokemon import Pokemon
 from pypoke.objects.tms import Tms
+from pypoke.objects.trainers import Trainers
 
 
 class Data(object):
@@ -9,6 +10,7 @@ class Data(object):
         ('moves', Moves),
         ('pokemon', Pokemon),
         ('tms', Tms),
+        ('trainers', Trainers),
     )
 
     def __init__(self, raw_data, version):

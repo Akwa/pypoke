@@ -11,12 +11,21 @@ BITS_IN_BYTE = 8
 
 
 class GscConstantsSet(object):
+    # The byte length is included in EVOLUTIONS_LENGTH.
     EVOLUTIONS_LENGTH = {
-        chr(0x01): 3,
-        chr(0x02): 3,
-        chr(0x03): 3,
-        chr(0x04): 3,
-        chr(0x05): 4,
+        chr(0x01): 3,  # type, level, species
+        chr(0x02): 3,  # type, item_id(use), species
+        chr(0x03): 3,  # type, held_item(trade), species
+        chr(0x04): 3,  # type, time_of_day(friendship), species
+        chr(0x05): 4,  # type, level, atk/def_ratio, species
+    }
+
+    # The byte length is not included in TRAINERS_LENGTH.
+    TRAINERS_LENGTH = {
+        chr(0x00): 2,  # level, species
+        chr(0x01): 6,  # level, species, move_1, move_2, move_3, move_4
+        chr(0x02): 3,  # level, species, held_item
+        chr(0x03): 7,  # level, species, held_item, move_1, move_2, move_3, move_4
     }
 
     class Moves(object):
@@ -36,6 +45,9 @@ class GscConstantsSet(object):
         MAX = 61
 
         TM_LENGTH = 1
+
+    class Trainers(object):
+        MAX = 67  # 67 trainer classes in game
 
     alphabet = Alphabet({
         0x50: u'@',

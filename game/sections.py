@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 import itertools
-import struct
+import operator
 
 from pypoke.configuration.constants import BITS_IN_BYTE, POINTER_LENGTH
 from pypoke.utils import (
@@ -237,10 +237,10 @@ class EvolutionsMovesSection(Section):
             yield self.get_single_evomoves_data(raw_data, pointer)
 
     def get_single_evomoves_data(self, raw_data, pos):
-        evo_delimiters = self.constants.EVOLUTIONS_LENGTH
+        delimiters = self.constants.EVOLUTIONS_LENGTH
         evolutions, pos = raw_data.smart_parse(pos,
                                                sent=0x00,
-                                               delimiters=evo_delimiters)
+                                               delimiters=delimiters)
         pos += 2
         moves = raw_data.smart_parse(pos,
                                      sent=0x00,
@@ -486,3 +486,43 @@ class TmsSection(Section):
             assembly_data.append(tm_move)
         assembly_data = ''.join(assembly_data)
         return assembly_data
+
+
+class TrainersSection(Section):
+    short = 'trainers'
+    object_name = 'Trainers'
+    end_calculation = 'bank_end'
+
+    def extract_data(self, raw_data):
+        self.get_old_data(raw_data)
+        bank_start = get_bank_start(self.start)
+        mid_end = self.start + self.object.MAX * POINTER_LENGTH
+
+        raw_pointer_gen = self.get_raw_pointers(self.start, mid_end, raw_data)
+        pair_pointers = []
+        for i, raw_pointer in enumerate(raw_pointer_gen, start=1):
+            pair_pointer = read_raw_pointer(raw_pointer, bank_start)
+            pair_pointers.append([pair_pointer, i])
+        pair_pointers = sorted(pair_pointers)
+
+        for i, (pair_pointer, j) in enumerate(pair_pointers[1:]):
+            pair_pointers[i].insert(1, pair_pointer)
+        pair_pointers[i+1].insert(1, None)
+
+        pair_pointers = sorted(pair_pointers, key=operator.itemgetter(2))
+
+        for pair_pointer in pair_pointers:
+            print self.get_trainer_class_data(raw_data, *pair_pointer)
+            yield self.get_trainer_class_data(raw_data, *pair_pointer)
+
+    def get_trainer_class_data(self, raw_data, start, end, id):
+        delimiters = self.constants.TRAINERS_LENGTH
+        trainers_class_data = raw_data.read_trainer_class(start=start,
+                                                          end=end,
+                                                          name_sep=0x50,
+                                                          trainer_sep=0xff,
+                                                          delimiters=delimiters)
+        return {
+            id: trainers_class_data,
+        }
+
