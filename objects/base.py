@@ -33,7 +33,9 @@ class BaseObject(dict):
 class SingleObject(dict):
     def viral_update(self, data):
         for key, value in data.iteritems():
-            value = SingleObject(value) if type(value) is dict else value
+            if type(value) is dict:
+                value = SingleObject(value)
+                value.viral_update(value)
             self.__setitem__(key, value)
 
     def __getattr__(self, item):

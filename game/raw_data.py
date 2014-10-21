@@ -63,24 +63,23 @@ class RawData(str):
         while pos_left < end:
             trainer = []
             pos_right = self.index(name_sep, pos_left)
-            name = self.get_byteslice(pos_left, pos_right, arrayize=False)
+            name = self.get_byteslice(pos_left, pos_right, arrayize)
             pos_left = pos_right + 1
             trainer_type = self.__getitem__(pos_left)
             delimiter = delimiters[trainer_type]
+            delimiter_len = len(delimiter)
             pos_left += 1
             pos_right = self.index(trainer_sep, pos_left)
             trainer.append(name)
-            trainer.append(trainer_type)
-            for i in xrange(pos_left, pos_right, delimiter):
-                j = i + delimiter
+            trainer.append(ord(trainer_type))
+            trainer.append([])
+            for i in xrange(pos_left, pos_right, delimiter_len):
+                j = i + delimiter_len
                 byteslice = self.get_byteslice(i, j, arrayize)
-                trainer.append(byteslice)
+                trainer[-1].append(dict(itertools.izip(delimiter, byteslice)))
             pos_left = pos_right + 1
             output.append(trainer)
         return output
-
-
-
 
     def smart_parse(self, start, sent,
                     delimiters=None, arrayize=True, step=None, return_pos=True):

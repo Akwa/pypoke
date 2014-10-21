@@ -512,8 +512,8 @@ class TrainersSection(Section):
         pair_pointers = sorted(pair_pointers, key=operator.itemgetter(2))
 
         for pair_pointer in pair_pointers:
-            print self.get_trainer_class_data(raw_data, *pair_pointer)
-            yield self.get_trainer_class_data(raw_data, *pair_pointer)
+            data = self.get_trainer_class_data(raw_data, *pair_pointer)
+            yield data
 
     def get_trainer_class_data(self, raw_data, start, end, id):
         delimiters = self.constants.TRAINERS_LENGTH
@@ -522,7 +522,13 @@ class TrainersSection(Section):
                                                           name_sep=0x50,
                                                           trainer_sep=0xff,
                                                           delimiters=delimiters)
-        return {
-            id: trainers_class_data,
+        trainers_class_data = {
+            i: {
+                'name': self.alphabet.decode(name),
+                'type': trainer_type,
+                'pokemon': dict(enumerate(pokemon, start=1))
+            }
+            for i, (name, trainer_type, pokemon)
+            in enumerate(trainers_class_data, start=1)
         }
-
+        return trainers_class_data

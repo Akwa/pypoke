@@ -22,10 +22,14 @@ class GscConstantsSet(object):
 
     # The byte length is not included in TRAINERS_LENGTH.
     TRAINERS_LENGTH = {
-        chr(0x00): 2,  # level, species
-        chr(0x01): 6,  # level, species, move_1, move_2, move_3, move_4
-        chr(0x02): 3,  # level, species, held_item
-        chr(0x03): 7,  # level, species, held_item, move_1, move_2, move_3, move_4
+        chr(0x00): ('level', 'species'),
+        chr(0x01): ('level', 'species',
+                    'move_1', 'move_2', 'move_3', 'move_4'),
+        chr(0x02): ('level', 'species',
+                    'held_item'),
+        chr(0x03): ('level', 'species',
+                    'held_item',
+                    'move_1', 'move_2', 'move_3', 'move_4'),
     }
 
     class Moves(object):
