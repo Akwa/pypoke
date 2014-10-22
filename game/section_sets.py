@@ -10,7 +10,6 @@ class SectionSet(object):
     """
     todo - sections to consider:
     # wild pokemon data (land, water, fish, headbutt, rock smash)
-    # trainer data
     # move effects data (raw bytecode?)
     # move animations data (raw bytecode?)
     # pokedex data

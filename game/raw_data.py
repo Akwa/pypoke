@@ -61,6 +61,8 @@ class RawData(str):
         output = []
         pos_left = start
         while pos_left < end:
+            if self[pos_left] == chr(0x00):
+                break
             trainer = []
             pos_right = self.index(name_sep, pos_left)
             name = self.get_byteslice(pos_left, pos_right, arrayize)

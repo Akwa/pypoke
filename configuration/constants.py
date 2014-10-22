@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import copy
+
 from pypoke.configuration.alphabet import Alphabet
 
 
@@ -10,7 +12,7 @@ POINTER_LENGTH = 2
 BITS_IN_BYTE = 8
 
 
-class GscConstantsSet(object):
+class GoldSilverConstantsSet(object):
     # The byte length is included in EVOLUTIONS_LENGTH.
     EVOLUTIONS_LENGTH = {
         chr(0x01): 3,  # type, level, species
@@ -51,7 +53,7 @@ class GscConstantsSet(object):
         TM_LENGTH = 1
 
     class Trainers(object):
-        MAX = 67  # 67 trainer classes in game
+        MAX = 66  # 66 trainer classes in game, not counting Crystal's Eusine
 
     alphabet = Alphabet({
         0x50: u'@',
@@ -136,3 +138,9 @@ class GscConstantsSet(object):
         0xfe: u'8',
         0xff: u'9',
     })
+
+
+class CrystalConstantsSet(GoldSilverConstantsSet):
+
+    class Trainers(GoldSilverConstantsSet.Trainers):
+        MAX = 67  # count Mysticalman (Eusine) trainer class

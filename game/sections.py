@@ -88,6 +88,12 @@ class Section(object):
     def assembly(self, object):
         assembly_data = self._assembly(object)
         assembly_data = assembly_data.ljust(self.total_length, chr(0x00))
+        if self.old_data != assembly_data:
+            print len(self.old_data)
+            for i, (j, k) in enumerate(zip(self.old_data, assembly_data)):
+                break
+                if j != k:
+                    print i, j, k
         return assembly_data
 
 
@@ -496,6 +502,7 @@ class TrainersSection(Section):
     def extract_data(self, raw_data):
         self.get_old_data(raw_data)
         bank_start = get_bank_start(self.start)
+        bank_end = get_bank_end(self.start)
         mid_end = self.start + self.object.MAX * POINTER_LENGTH
 
         raw_pointer_gen = self.get_raw_pointers(self.start, mid_end, raw_data)
@@ -507,7 +514,7 @@ class TrainersSection(Section):
 
         for i, (pair_pointer, j) in enumerate(pair_pointers[1:]):
             pair_pointers[i].insert(1, pair_pointer)
-        pair_pointers[i+1].insert(1, None)
+        pair_pointers[i + 1].insert(1, bank_end)
 
         pair_pointers = sorted(pair_pointers, key=operator.itemgetter(2))
 
@@ -532,3 +539,40 @@ class TrainersSection(Section):
             in enumerate(trainers_class_data, start=1)
         }
         return trainers_class_data
+
+    @staticmethod
+    def get_single_evomoves_data(raw_data, pos):
+        moves = raw_data.read_until_sentinel(pos, sent=0xff)
+        return {
+            'egg_moves': moves,
+        }
+
+    def _assembly(self, object):
+        assembly_data, trainer_data = [], []
+        pos = get_relative_start(self.start)
+        pos += self.object.MAX * POINTER_LENGTH
+        for id, data in sorted(object.iteritems()):
+            pointer = create_pointer(pos)
+            assembly_data.append(pointer)
+            for id, trainer in sorted(data.iteritems()):
+                name = self.alphabet.encode(trainer['name'])
+                trainer_type = chr(trainer['type'])
+                fields = self.constants.TRAINERS_LENGTH[trainer_type]
+                pokemon_data = ''.join(
+                    ''.join((
+                        chr(pokemon[field]) for field in fields
+                    ))
+                    for id, pokemon in sorted(trainer['pokemon'].iteritems())
+                )
+                current_trainer = ''.join((
+                    name,
+                    chr(0x50),
+                    trainer_type,
+                    pokemon_data,
+                    chr(0xff),
+                ))
+                trainer_data.append(current_trainer)
+                pos += len(current_trainer)
+        assembly_data.extend(trainer_data)
+        assembly_data = ''.join(assembly_data)
+        return assembly_data
